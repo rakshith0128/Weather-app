@@ -15,12 +15,16 @@ export function useProfile() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    // Hydrating from localStorage (an external system) after mount to avoid
+    // an SSR/client markup mismatch — a blessed exception to set-state-in-effect.
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (raw) setProfileState(JSON.parse(raw));
     } catch {
       // corrupted storage — treat as no profile
     }
+     
     setLoaded(true);
   }, []);
 

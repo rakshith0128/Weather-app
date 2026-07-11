@@ -37,6 +37,9 @@ export function useWeather(lat: number | undefined, lon: number | undefined) {
   );
 
   useEffect(() => {
+    // Fetching from an external system (the weather API) when the
+    // coordinates change — the canonical data-fetching effect pattern.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     refresh(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lat, lon]);

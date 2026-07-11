@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import type { AuthUser } from '@/lib/useAuth';
 
 interface Props {
@@ -8,6 +8,7 @@ interface Props {
 }
 
 export default function LoginForm({ onLogin }: Props) {
+  const uid = useId();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -30,8 +31,9 @@ export default function LoginForm({ onLogin }: Props) {
   return (
     <div className="space-y-4">
       <div>
-        <label className="text-xs uppercase tracking-wide text-dim font-semibold">Name</label>
+        <label htmlFor={`${uid}-name`} className="text-xs uppercase tracking-wide text-dim font-semibold">Name</label>
         <input
+          id={`${uid}-name`}
           type="text"
           placeholder="Your name"
           value={name}
@@ -41,8 +43,9 @@ export default function LoginForm({ onLogin }: Props) {
         />
       </div>
       <div>
-        <label className="text-xs uppercase tracking-wide text-dim font-semibold">Email</label>
+        <label htmlFor={`${uid}-email`} className="text-xs uppercase tracking-wide text-dim font-semibold">Email</label>
         <input
+          id={`${uid}-email`}
           type="email"
           placeholder="you@example.com"
           value={email}
@@ -51,7 +54,7 @@ export default function LoginForm({ onLogin }: Props) {
           className="w-full mt-1.5 bg-surface2 border border-border rounded-lg px-3 py-2.5 text-sm focus:border-accent focus:outline-none"
         />
       </div>
-      {error && <p className="text-sm text-danger">{error}</p>}
+      {error && <p role="alert" className="text-sm text-danger">{error}</p>}
       <button
         type="button"
         onClick={handleSubmit}

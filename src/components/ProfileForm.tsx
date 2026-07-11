@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { geocodeLocation } from '@/lib/weather';
 import type { Dwelling, GeocodeResult, Language, Profile } from '@/lib/types';
 
@@ -13,6 +13,7 @@ interface Props {
 }
 
 export default function ProfileForm({ initial, submitLabel, onSave }: Props) {
+  const uid = useId();
   const [locQuery, setLocQuery] = useState(initial?.locationName ?? '');
   const [results, setResults] = useState<GeocodeResult[]>([]);
   const [searching, setSearching] = useState(false);
@@ -83,9 +84,10 @@ export default function ProfileForm({ initial, submitLabel, onSave }: Props) {
     <div className="space-y-5">
       {/* Location */}
       <div>
-        <label className="text-xs uppercase tracking-wide text-dim font-semibold">Location</label>
+        <label htmlFor={`${uid}-location`} className="text-xs uppercase tracking-wide text-dim font-semibold">Location</label>
         <div className="flex gap-2 mt-1.5">
           <input
+            id={`${uid}-location`}
             type="text"
             placeholder="Search your city or area..."
             value={locQuery}
@@ -104,6 +106,7 @@ export default function ProfileForm({ initial, submitLabel, onSave }: Props) {
             type="button"
             onClick={useGeolocation}
             title="Use my current location"
+            aria-label="Use my current location"
             className="bg-surface2 border border-border rounded-lg px-3 py-2.5 text-sm hover:border-accent"
           >
             📍
@@ -159,8 +162,9 @@ export default function ProfileForm({ initial, submitLabel, onSave }: Props) {
             ['pets', pets, setPets],
           ] as const).map(([key, val, setter]) => (
             <div key={key}>
-              <label className="text-xs text-dim capitalize">{key}</label>
+              <label htmlFor={`${uid}-${key}`} className="text-xs text-dim capitalize">{key}</label>
               <input
+                id={`${uid}-${key}`}
                 type="number" min={0} max={20}
                 value={val}
                 onChange={(e) => setter(Math.max(0, +e.target.value || 0))}
@@ -173,8 +177,9 @@ export default function ProfileForm({ initial, submitLabel, onSave }: Props) {
 
       {/* Dwelling */}
       <div>
-        <label className="text-xs uppercase tracking-wide text-dim font-semibold">Dwelling type</label>
+        <label htmlFor={`${uid}-dwelling`} className="text-xs uppercase tracking-wide text-dim font-semibold">Dwelling type</label>
         <select
+          id={`${uid}-dwelling`}
           value={dwelling}
           onChange={(e) => setDwelling(e.target.value as Dwelling)}
           className="w-full mt-1.5 bg-surface2 border border-border rounded-lg px-3 py-2.5 text-sm focus:border-accent focus:outline-none"
@@ -187,8 +192,9 @@ export default function ProfileForm({ initial, submitLabel, onSave }: Props) {
 
       {/* Language */}
       <div>
-        <label className="text-xs uppercase tracking-wide text-dim font-semibold">Preferred language</label>
+        <label htmlFor={`${uid}-language`} className="text-xs uppercase tracking-wide text-dim font-semibold">Preferred language</label>
         <select
+          id={`${uid}-language`}
           value={language}
           onChange={(e) => setLanguage(e.target.value as Language)}
           className="w-full mt-1.5 bg-surface2 border border-border rounded-lg px-3 py-2.5 text-sm focus:border-accent focus:outline-none"

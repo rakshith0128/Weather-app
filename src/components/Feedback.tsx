@@ -9,8 +9,8 @@ export function LoadingSpinner({ msg }: { msg: string }) {
 
 export function ErrorMessage({ error, prefix }: { error: string; prefix?: string }) {
   return (
-    <div className="flex items-start gap-2 text-sm text-danger">
-      <span className="mt-0.5">⚠️</span>
+    <div role="alert" className="flex items-start gap-2 text-sm text-danger">
+      <span className="mt-0.5" aria-hidden="true">⚠️</span>
       <div>{prefix ? `${prefix} ` : ''}{error}</div>
     </div>
   );

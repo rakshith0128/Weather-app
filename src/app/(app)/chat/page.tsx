@@ -112,6 +112,7 @@ export default function ChatPage() {
       <div className="mt-3 flex gap-2">
         <input
           type="text"
+          aria-label="Ask Varsha a question"
           placeholder={weatherLoading ? 'Loading live weather…' : weatherError ? 'Weather unavailable' : 'Ask about today’s weather, prep, or travel…'}
           value={input}
           disabled={!weather || sending}

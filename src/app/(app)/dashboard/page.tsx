@@ -22,6 +22,9 @@ export default function DashboardPage() {
   const [aiError, setAiError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Hydrating from localStorage (an external system) after mount to avoid
+    // an SSR/client markup mismatch — a blessed exception to set-state-in-effect.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTodayAction(localStorage.getItem(STORAGE_KEY) ?? '');
   }, []);
 
@@ -51,9 +54,11 @@ Write today's guidance for this household in 4-6 sentences: start with one clear
     }
   };
 
-  // Auto-generate once weather loads, if nothing cached yet
+  // Auto-generate once weather loads, if nothing cached yet — reacting to an
+  // external data source (the weather fetch) becoming available.
   useEffect(() => {
     if (weather && profile && !todayAction && !aiLoading && !aiError) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       generateGuidance();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -210,12 +215,16 @@ Write today's guidance for this household in 4-6 sentences: start with one clear
 }
 
 function RainOverlay() {
-  const drops = Array.from({ length: 20 }, (_, i) => ({
-    left: Math.random() * 100,
-    delay: Math.random() * 2,
-    dur: 0.6 + Math.random() * 0.8,
-    h: 15 + Math.random() * 25,
-  }));
+  // Computed once on mount via lazy initializer, not on every render — the
+  // positions are decorative and don't need to change on re-render.
+  const [drops] = useState(() =>
+    Array.from({ length: 20 }, () => ({
+      left: Math.random() * 100,
+      delay: Math.random() * 2,
+      dur: 0.6 + Math.random() * 0.8,
+      h: 15 + Math.random() * 25,
+    }))
+  );
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
       {drops.map((d, i) => (

@@ -29,10 +29,14 @@ export default function PlanPage() {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    // Hydrating from localStorage (an external system) after mount to avoid
+    // an SSR/client markup mismatch — a blessed exception to set-state-in-effect.
     try {
       const p = localStorage.getItem(PLAN_KEY);
       const c = localStorage.getItem(CHECKED_KEY);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (p) setPlanData(JSON.parse(p));
+       
       if (c) setChecked(JSON.parse(c));
     } catch {
       // corrupted storage — ignore, treat as no plan

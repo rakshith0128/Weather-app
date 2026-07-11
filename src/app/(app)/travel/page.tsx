@@ -34,6 +34,10 @@ export default function TravelPage() {
   const [explError, setExplError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Syncing from profile (loaded asynchronously from localStorage) once
+    // it becomes available — profile is null on first render, so this
+    // can't be a plain useState initializer.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (profile) setOriginQ(profile.locationName);
   }, [profile]);
 
@@ -107,8 +111,9 @@ Explain the decision now.`;
       <div className="bg-surface border border-border rounded-2xl p-5 space-y-4">
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="text-xs uppercase tracking-wide text-dim font-semibold">From</label>
+            <label htmlFor="travel-origin" className="text-xs uppercase tracking-wide text-dim font-semibold">From</label>
             <input
+              id="travel-origin"
               type="text"
               placeholder="Origin city/area"
               value={originQ}
@@ -118,8 +123,9 @@ Explain the decision now.`;
             />
           </div>
           <div>
-            <label className="text-xs uppercase tracking-wide text-dim font-semibold">To</label>
+            <label htmlFor="travel-dest" className="text-xs uppercase tracking-wide text-dim font-semibold">To</label>
             <input
+              id="travel-dest"
               type="text"
               placeholder="Destination city/area"
               value={destQ}
