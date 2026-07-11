@@ -9,6 +9,7 @@ const TABS = [
   { href: '/plan', label: 'Prep Plan', icon: '📋' },
   { href: '/alerts', label: 'Alerts', icon: '⚠️' },
   { href: '/travel', label: 'Travel', icon: '🚗' },
+  { href: '/chat', label: 'Ask Varsha', icon: '💬' },
   { href: '/settings', label: 'Settings', icon: '⚙️' },
 ];
 

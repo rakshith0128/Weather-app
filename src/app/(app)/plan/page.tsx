@@ -47,7 +47,7 @@ export default function PlanPage() {
     try {
       const risk = computeRisk(weather, profile, 0);
       const sys = baseSystemPrompt(profile) +
-        `\nYou must respond ONLY with valid JSON matching exactly this shape: {"do_now": string[], "do_today": string[], "do_this_week": string[]}. 3-6 items per list. Each item should be a single, clear, actionable sentence. No markdown, no extra text.`;
+        `\nYou must respond ONLY with valid JSON matching exactly this shape: {"do_now": string[], "do_today": string[], "do_this_week": string[]}. 5-8 items per list. Each item should be one or two sentences: the concrete action plus a brief reason it matters right now, tailored to this household's composition and dwelling type. No markdown, no extra text.`;
       const forecastSummary = weather.daily.time
         .map((d, i) => `${d}: ${wmoDesc(weather.daily.weather_code[i])}, rain prob ${weather.daily.precipitation_probability_max[i]}%, rainfall ${weather.daily.precipitation_sum[i]}mm, wind ${Math.round(weather.daily.wind_speed_10m_max[i])}km/h`)
         .join('\n');

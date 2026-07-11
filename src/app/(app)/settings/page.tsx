@@ -7,7 +7,7 @@ import { EMERGENCY_CONTACTS } from '@/lib/constants';
 import ProfileForm from '@/components/ProfileForm';
 
 export default function SettingsPage() {
-  const { profile, setProfile, clearProfile, ready } = useRequireProfile();
+  const { profile, setProfile, clearProfile, user, logout, ready } = useRequireProfile();
   const router = useRouter();
   const [keyStatus, setKeyStatus] = useState<'checking' | 'ok' | 'missing'>('checking');
   const [saved, setSaved] = useState(false);
@@ -26,10 +26,30 @@ export default function SettingsPage() {
       .catch(() => setKeyStatus('missing'));
   }, []);
 
-  if (!ready || !profile) return null;
+  if (!ready || !profile || !user) return null;
 
   return (
     <div className="fade-in max-w-xl space-y-8">
+      <div>
+        <h2 className="font-display text-xl font-bold mb-1">Account</h2>
+        <p className="text-dim text-sm mb-3">Signed in as {user.name} ({user.email}).</p>
+        <div className="bg-surface border border-border rounded-2xl p-4 flex items-center justify-between">
+          <div className="text-sm">
+            <div className="font-semibold">{user.name}</div>
+            <div className="text-dim text-xs">{user.email}</div>
+          </div>
+          <button
+            onClick={() => {
+              logout();
+              router.replace('/');
+            }}
+            className="text-xs border border-border rounded-lg px-3 py-1.5 hover:border-danger hover:text-danger transition-colors"
+          >
+            Log out
+          </button>
+        </div>
+      </div>
+
       <div>
         <h2 className="font-display text-xl font-bold mb-1">Gemini API key</h2>
         <p className="text-dim text-sm mb-3">

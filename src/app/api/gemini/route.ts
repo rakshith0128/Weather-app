@@ -22,21 +22,31 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  let body: { systemInstruction?: string; userPrompt?: string; jsonMode?: boolean };
+  let body: {
+    systemInstruction?: string;
+    userPrompt?: string;
+    jsonMode?: boolean;
+    messages?: { role: 'user' | 'model'; text: string }[];
+  };
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
   }
 
-  const { systemInstruction, userPrompt, jsonMode } = body;
-  if (!systemInstruction || !userPrompt) {
-    return NextResponse.json({ error: 'Missing systemInstruction or userPrompt' }, { status: 400 });
+  const { systemInstruction, userPrompt, jsonMode, messages } = body;
+  if (!systemInstruction || (!userPrompt && !messages?.length)) {
+    return NextResponse.json({ error: 'Missing systemInstruction or userPrompt/messages' }, { status: 400 });
   }
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  // messages carries a full conversation history for the chatbot; a plain
+  // userPrompt is used for every single-turn call elsewhere in the app.
+  const contents = messages?.length
+    ? messages.map((m) => ({ role: m.role, parts: [{ text: m.text }] }))
+    : [{ role: 'user', parts: [{ text: userPrompt }] }];
   const geminiBody: Record<string, unknown> = {
-    contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
+    contents,
     systemInstruction: { parts: [{ text: systemInstruction }] },
   };
   if (jsonMode) geminiBody.generationConfig = { responseMimeType: 'application/json' };

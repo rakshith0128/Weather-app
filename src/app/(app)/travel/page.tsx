@@ -79,7 +79,7 @@ export default function TravelPage() {
     setExplError(null);
     try {
       const sys = baseSystemPrompt(profile) +
-        `\nThe Go/Wait/Avoid decision is already fixed — do not change it. Just explain why, referencing the real numbers given, in 2-3 sentences.`;
+        `\nThe Go/Wait/Avoid decision is already fixed — do not change it. Explain the reasoning in 4-5 sentences: compare conditions at both ends referencing the real numbers given, note anything to prepare for or watch out for during the trip if travel proceeds, and mention any packing or timing suggestion appropriate to the conditions.`;
       const prompt = `Trip: ${res.origin.name} → ${res.dest.name}.
 Decision (fixed): ${res.decision}
 Origin: risk ${res.originRisk.level} (${res.originRisk.total}/100) — rain prob ${res.originRisk.factors.precipProb}%, rainfall ${res.originRisk.factors.precipSum}mm, wind ${Math.round(res.originRisk.factors.windMax)}km/h

@@ -40,7 +40,7 @@ export default function DashboardPage() {
 - Today's max rain probability: ${risk.factors.precipProb}%, expected rainfall total: ${risk.factors.precipSum}mm, max wind: ${Math.round(risk.factors.windMax)}km/h
 - Computed household risk level: ${risk.level} (${risk.total}/100)
 
-Give ONE specific, actionable recommendation (2-3 sentences max) for what this household should do today given this exact data. Be concrete (times, actions), not generic.`;
+Write today's guidance for this household in 4-6 sentences: start with one clear headline recommendation, then explain briefly why (referencing the exact numbers above), then give 2-3 concrete supporting actions (specific times, specific tasks) tailored to this household's composition and dwelling type. Be specific and practical, not generic filler.`;
       const text = await callGemini(sys, prompt);
       setTodayAction(text);
       localStorage.setItem(STORAGE_KEY, text);

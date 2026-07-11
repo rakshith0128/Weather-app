@@ -28,7 +28,7 @@ export default function AlertsPage() {
     setAdvisoryError((s) => ({ ...s, [idx]: '' }));
     try {
       const sys = baseSystemPrompt(profile) +
-        `\nWrite a short citizen-facing advisory (2-3 sentences). The severity level is fixed and given to you — do not change it, just phrase the warning and the recommended action appropriately for that severity.`;
+        `\nWrite a citizen-facing advisory in 4-5 sentences. The severity level is fixed and given to you — do not change it. Explain what to expect during this window (referencing the exact numbers), why it matters for this specific household, and 2-3 concrete precautions to take before/during the window. Phrase the tone to match the severity (Info: light heads-up, Watch: prepare now, Warning: urgent action).`;
       const prompt = `Alert window: ${fmtTime(win.startTime)} to ${fmtTime(win.endTime)} in ${profile.locationName}.
 Severity: ${win.severity}
 Max rain probability: ${win.maxProb}%
